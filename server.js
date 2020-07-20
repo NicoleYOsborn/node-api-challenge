@@ -1,13 +1,6 @@
 const express = require("express");
-const server = express();
 const projectsRouter = require("./projects/projects-router.js");
-
-server.get("/", (req, res) => {
-    res.send(`
-    
-    <p>Welcome to my API</p>
-  `);
-});
+const server = express();
 
 
 server.use(express.json());
