@@ -1,3 +1,10 @@
+const server = require('./server.js');
+
+const PORT = 8000;
+server.listen(PORT, () => {
+    console.log(`\n*** Server Running on http://localhost:${PORT} ***\n`);
+});
+
 /*
 play this: https://www.youtube.com/watch?v=d-diB65scQU
 
