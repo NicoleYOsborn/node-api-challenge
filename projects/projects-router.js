@@ -42,11 +42,20 @@ router.post("/", (req, res)=>{
         res.status(500).json({message: 'Error adding project'})
     })
     // post a new project
-})
+});
 
 router.post("/:id/actions", validateProjectId, (req, res)=>{
+    const actionInfo = {project_id: req.params.id, ...req.body};
+    AHelpers.insert(actionInfo)
+    .then(action =>{
+        res.status(201).json(action);
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message: 'error adding the action'});
+    })
     // posts a new action to a project
-})
+});
 
 router.put("/:id", validateProjectId, (req, res)=>{
     // updates a project
