@@ -21,7 +21,7 @@ router.get("/:id", validateProjectId, (req, res)=>{
 })
 
 router.get("/:id/actions", validateProjectId, (req, res)=>{
-    AHelpers.get(req.params.id)
+    PHelpers.get(req.params.id)
     .then(actions =>{
         res.status(200).json(actions);
     })
@@ -58,19 +58,68 @@ router.post("/:id/actions", validateProjectId, (req, res)=>{
 });
 
 router.put("/:id", validateProjectId, (req, res)=>{
+     PHelpers.update(req.params.id, req.body)
+     .then(project =>{
+         if(project){
+             res.status(200).json(project);
+         }else{
+             res.status(404).json({message: "the project could not be found"})
+         }
+     })
+     .catch(error =>{
+         console.log(error);
+         res.status(500).json({message: "error updating the project"});
+     })
     // updates a project
-})
+});
 
-router.put("/:id/actions", validateProjectId, (req, res)=>{
+router.put("/:id/actions/:aid", validateProjectId, (req, res)=>{
+    var changes = req.body
+    changes.project_id = req.params.id;
+    AHelpers.update(req.params.aid, changes)
+    .then(action =>{
+        if(action){
+            res.status(200).json(action);
+        }else{
+            res.status(404).json({message: "the action could not be found"})
+        }
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({message: "error updating the action"});
+    })
     // updates an action
 })
 
 router.delete("/:id", validateProjectId, (req, res)=>{
+    PHelpers.remove(req.params.id)
+    .then(count =>{
+        if(count >0) {
+          res.status(200).json({message: "the project has been removed"});
+        } else {
+          res.status(404).json({ message: 'the project could not be found'});
+        }
+      })
+      .catch(error=>{
+        console.log(error);
+        res.status(500).json({message: 'Error removing the project'})
+      });
     // removes a project
 })
 
-router.delete("/:id/actions", validateProjectId, (req, res)=>{
-    // removes an action
+router.delete("/:id/actions/:aid", validateProjectId, (req, res)=>{
+    AHelpers.remove(req.params.aid)
+    .then(count =>{
+        if(count >0) {
+          res.status(200).json({message: "the action has been removed"});
+        } else {
+          res.status(404).json({ message: 'the action could not be found'});
+        }
+      })
+      .catch(error =>{
+          console.log(error);
+          res.status(500).json({message: "Error removing the action"})
+      })
 })
 
 // custom middleware
