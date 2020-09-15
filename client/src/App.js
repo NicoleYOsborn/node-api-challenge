@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import Project from './components/Project'
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Project from './components/Project';
+import Action from './components/Action';
 import axios from 'axios';
 
 import './App.css';
 
+
 function App() {
   const [projects, setProjects] = useState([]);
+  
 
   useEffect(()=>{
     axios
@@ -17,10 +21,24 @@ function App() {
 
 
   return (
+    <Router>
+
     <div className="App">
-     {projects.map(project=><Project projects={project}></Project>)}
-      
+      <Switch>
+        <Route exact path = "/projects">
+        {projects.map(project=><Project projects={project}></Project>)}
+        </Route>
+
+        <Route path="/projects/:id/actions">
+        <Action />
+        </Route>
+
+    {/*   */}
+
+      </Switch>
     </div>
+    
+    </Router>
   );
 }
 
